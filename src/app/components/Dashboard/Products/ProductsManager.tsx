@@ -19,7 +19,11 @@ import {
 } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
+interface DraftBlock {
+    text: string;
+    type: string;
+    depth: number;
+}
 export default function ProductsManager() {
     const [products, setProducts] = useState<Product[]>([]);
     const [newProduct, setNewProduct] = useState<Partial<Product>>({});
@@ -36,9 +40,7 @@ export default function ProductsManager() {
 
 
     // Gestion du changement de vue (grid ou list)
-    const toggleViewMode = () => {
-        setViewMode(prevMode => (prevMode === 'grid' ? 'list' : 'grid'));
-    };
+
     // Référence pour vérifier si le composant est monté
     const isMounted = useRef(false);
 
@@ -298,7 +300,7 @@ export default function ProductsManager() {
                                     try {
                                         const parsedDescription = JSON.parse(product.description);
                                         return parsedDescription.blocks
-                                            .map((block: any) => block.text)
+                                            .map((block: DraftBlock) => block.text)
                                             .join('\n');
                                     } catch {
                                         return product.description; // Retourne la description brute si ce n'est pas du JSON
