@@ -6,7 +6,7 @@ import ProductsManager from '../components/Dashboard/Products/ProductsManager'
 import styles from './styles.module.scss';
 
 export default function DashboardPage() {
-    const { data: session, status } = useSession();
+    const { status } = useSession();
     const router = useRouter();
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [sideChoice, setSideChoice] = useState('produits')

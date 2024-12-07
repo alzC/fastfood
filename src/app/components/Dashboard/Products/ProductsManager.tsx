@@ -137,6 +137,10 @@ export default function ProductsManager() {
         }
     };
 
+    const handleCancelEdit = () => {
+        resetForm();
+    };
+
     const filteredProducts = products.filter(product => {
         const matchesName = product.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = categoryFilter ? product.category === categoryFilter : true;
@@ -241,6 +245,11 @@ export default function ProductsManager() {
                     <button onClick={handleAddOrEditProduct}>
                         {editingProduct ? 'Modifier' : 'Ajouter'}
                     </button>
+                    {editingProduct && (
+                        <button onClick={handleCancelEdit} className={styles.cancelButton}>
+                            Annuler
+                        </button>
+                    )}
                 </div>
             </div>
 

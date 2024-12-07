@@ -1,4 +1,4 @@
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient} from 'mongodb';
 
 const uri = process.env.MONGODB_URI as string; // Assurez-vous que MONGODB_URI est défini dans .env.local
 const options = {};
