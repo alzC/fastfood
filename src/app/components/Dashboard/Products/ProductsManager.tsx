@@ -24,13 +24,7 @@ interface DraftBlock {
     type: string;
     depth: number;
 }
-const categoryColors: Record<string, string> = {
-    Sandwich: 'rgb(255 152 0)',    // Exemple de couleur pour Sandwich
-    Snacks: '#007bff',             // Exemple pour Snacks
-    Boissons: '#28a745',           // Exemple pour Boissons
-    Alcool: '#6f42c1',             // Exemple pour Alcool
-    Epicerie: '#dc3545',           // Exemple pour Epicerie
-};
+
 
 export default function ProductsManager() {
     const [products, setProducts] = useState<Product[]>([]);
