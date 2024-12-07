@@ -24,6 +24,14 @@ interface DraftBlock {
     type: string;
     depth: number;
 }
+const categoryColors: Record<string, string> = {
+    Sandwich: 'rgb(255 152 0)',    // Exemple de couleur pour Sandwich
+    Snacks: '#007bff',             // Exemple pour Snacks
+    Boissons: '#28a745',           // Exemple pour Boissons
+    Alcool: '#6f42c1',             // Exemple pour Alcool
+    Epicerie: '#dc3545',           // Exemple pour Epicerie
+};
+
 export default function ProductsManager() {
     const [products, setProducts] = useState<Product[]>([]);
     const [newProduct, setNewProduct] = useState<Partial<Product>>({});
@@ -34,7 +42,7 @@ export default function ProductsManager() {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [categoryFilter, setCategoryFilter] = useState<string>('');
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');  // L'état toggle entre grid et list
-
+    const [subCategoryFilter, setSubCategoryFilter] = useState("")
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
     const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
 
@@ -171,11 +179,18 @@ export default function ProductsManager() {
     const handleCancelEdit = () => {
         resetForm();
     };
-
+    const categoryColors = {
+        Sandwich: 'rgb(255 152 0)',    // Exemple de couleur pour Sandwich
+        Snacks: '#007bff',             // Exemple pour Snacks
+        Boissons: '#28a745',           // Exemple pour Boissons
+        Alcool: '#6f42c1',             // Exemple pour Alcool
+        Epicerie: '#dc3545',           // Exemple pour Epicerie
+    };
     const filteredProducts = products.filter(product => {
         const matchesName = product.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = categoryFilter ? product.category === categoryFilter : true;
-        return matchesName && matchesCategory;
+        const matchesSubCategory = subCategoryFilter ? product.subCategory === subCategoryFilter : true;
+        return matchesName && matchesCategory && matchesSubCategory;
     });
     return (
         <div className={styles.productsManager}>
@@ -202,6 +217,19 @@ export default function ProductsManager() {
                         </option>
                     ))}
                 </select>
+
+                <select
+                    value={subCategoryFilter}
+                    onChange={(e) => setSubCategoryFilter(e.target.value)}
+                >
+                    <option value="">Toutes les sous-catégories</option>
+                    {Array.from(new Set(products.map((p) => p.subCategory))).map((subCategory) => (
+                        <option key={subCategory} value={subCategory}>
+                            {subCategory}
+                        </option>
+                    ))}
+                </select>
+
                 <div className={styles.viewToggle}>
                     <FaList
                         className={viewMode === 'list' ? styles.activeIcon : ''}
@@ -228,30 +256,43 @@ export default function ProductsManager() {
             >
                 <div className={styles.addProduct}>
                     <div className={styles.formGroup}>
-                        <input
-                            type="text"
-                            placeholder="Nom"
-                            value={newProduct.name || ''}
-                            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                        />
-                        <input
-                            type="number"
-                            placeholder="Prix"
-                            value={newProduct.price || ''}
-                            onChange={(e) => setNewProduct({ ...newProduct, price: parseFloat(e.target.value) })}
-                        />
-                        <input
-                            type="number"
-                            placeholder="Stock"
-                            value={newProduct.stock || ''}
-                            onChange={(e) => setNewProduct({ ...newProduct, stock: parseInt(e.target.value) })}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Catégorie"
-                            value={newProduct.category || ''}
-                            onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                        />
+                        <div className={styles.inlineInputFirst}>
+                            <input
+                                type="text"
+                                placeholder="Nom"
+                                value={newProduct.name || ''}
+                                onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                            />
+                            <input
+                                type="number"
+                                placeholder="Prix"
+                                value={newProduct.price || ''}
+                                onChange={(e) => setNewProduct({ ...newProduct, price: parseFloat(e.target.value) })}
+                            />
+                            <input
+                                type="number"
+                                placeholder="Stock"
+                                value={newProduct.stock || ''}
+                                onChange={(e) => setNewProduct({ ...newProduct, stock: parseInt(e.target.value) })}
+                            />
+                        </div>
+                        <div className={styles.inlineInput}>
+
+
+                            <input
+                                type="text"
+                                placeholder="Catégorie"
+                                value={newProduct.category || ''}
+                                onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                            />
+
+                            <input
+                                type="text"
+                                placeholder="Sous-catégorie"
+                                value={newProduct.subCategory || ''}  // Utilisation de subCategory
+                                onChange={(e) => setNewProduct({ ...newProduct, subCategory: e.target.value })}
+                            />
+                        </div>
                         <Editor
                             editorState={editorState}
                             onEditorStateChange={handleEditorChange}
@@ -295,6 +336,29 @@ export default function ProductsManager() {
                         />
                         <div className={styles.productDetails}>
                             <span className={styles.truncatedDescription}>{product.name}</span>
+
+                            {/* Appliquer la couleur de la catégorie */}
+                            <p
+                                style={{
+                                    padding: "5px",
+                                    backgroundColor: categoryColors[product.category as keyof typeof categoryColors] || '#ccc', // Assurez-vous que la catégorie est bien une clé valide
+                                    color: 'white',
+                                    margin: "1px 0",
+                                    borderRadius: "5px",
+                                }}
+                            >
+                                {product.category}
+                            </p>
+
+                            <p style={{
+                                padding: "5px",
+                                background: "#007bff",
+                                color: 'white',
+                                borderRadius: "5px"
+                            }}>
+                                {product.subCategory}
+                            </p>
+
                             <p className={styles.truncatedDescription}>
                                 {(() => {
                                     try {
@@ -308,14 +372,16 @@ export default function ProductsManager() {
                                 })()}
                             </p>
 
-                            <span>{product.price} €</span>
-                            <span>Stock : {product.stock}</span>
+                            <p>{product.price} €</p>
+                            <p>Stock : {product.stock}</p>
                         </div>
                         <div className={styles.actions}>
                             <button onClick={() => handleEditProduct(product)}>Modifier</button>
                             <button onClick={() => handleDeleteProduct(product._id!)}>Supprimer</button>
                         </div>
                     </div>
+
+
                 ))}
             </div>
         </div >

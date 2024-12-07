@@ -38,3 +38,4 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Erreur lors de l\'ajout du produit.' }, { status: 500 });
   }
 }
+

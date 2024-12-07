@@ -272,7 +272,7 @@
 }
 
 .dropdownContent.open {
-    max-height: 1000px;
+    max-height: 1400px;
     /* ou une valeur plus grande */
     opacity: 1;
     visibility: visible;
@@ -302,4 +302,56 @@
 
 .imageProduct {
     margin-top: 75px;
+}
+
+.productDetails .Sandwich {
+    background-color: rgb(255 152 0);
+    /* Couleur pour les Sandwichs */
+}
+
+.productDetails .Snacks {
+    background-color: #007bff;
+    /* Couleur pour les Snacks */
+}
+
+.productDetails .Boissons {
+    background-color: #28a745;
+    /* Couleur pour les Boissons */
+}
+
+.productDetails .Epicerie {
+    background-color: #dc3545;
+    /* Couleur pour l'Epicerie */
+}
+
+.productDetails .Alcool {
+    background-color: #6f42c1;
+    /* Couleur pour l'Alcool */
+}
+
+.inlineInputFirst {
+    display: flex;
+    justify-content: space-between;
+    width: 75%;
+
+    input {
+        max-width: 350px;
+    }
+
+    input:nth-child(2),
+    input:nth-child(3) {
+        width: 85px;
+    }
+}
+
+.inlineInput {
+    display: flex;
+    justify-content: space-between;
+    width: 75%;
+
+    input {
+        max-width: 350px;
+    }
+
+
 }
