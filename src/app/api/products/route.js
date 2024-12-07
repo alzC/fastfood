@@ -1,23 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
-import { Product } from '@/models/product';  // Importer le modèle Product
+import { ObjectId } from 'mongodb';
 
- export const dynamic = 'force-dynamic';
+const dynamic = 'force-dynamic';
+
 // Récupérer tous les produits (GET)
 export async function GET() {
   const client = await clientPromise;
   const db = client.db('restaurant');
 
   const products = await db.collection('products').find().toArray();
-  return NextResponse.json(products as unknown as Product[]);
+  return NextResponse.json(products); // Pas besoin de typage ici en JS
 }
 
 // Ajouter un produit (POST)
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   const client = await clientPromise;
   const db = client.db('restaurant');
 
-  const body: Product = await request.json();
+  const body = await request.json();
 
   if (!body.name || !body.price || body.stock === undefined || !body.category || !body.description) {
     return NextResponse.json({ error: 'Nom, prix, stock, catégorie et description sont requis.' }, { status: 400 });
@@ -37,4 +38,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Erreur lors de l\'ajout du produit.' }, { status: 500 });
   }
 }
-
