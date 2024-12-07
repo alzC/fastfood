@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
 
-const dynamic = 'force-dynamic';
+
+export const dynamic = 'force-dynamic';
 
 // Récupérer tous les produits (GET)
 export async function GET() {
