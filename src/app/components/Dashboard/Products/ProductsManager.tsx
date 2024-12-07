@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styles from './ProductsManager.module.scss';
 import { Product } from '@/models/product';
@@ -29,21 +29,40 @@ export default function ProductsManager() {
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [categoryFilter, setCategoryFilter] = useState<string>('');
-    const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid');
-    const [isFormOpen, setIsFormOpen] = useState<boolean>(false); // Définition de isFormOpen
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');  // L'état toggle entre grid et list
+
+    const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
     const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
 
+
+    // Gestion du changement de vue (grid ou list)
+    const toggleViewMode = () => {
+        setViewMode(prevMode => (prevMode === 'grid' ? 'list' : 'grid'));
+    };
+    // Référence pour vérifier si le composant est monté
+    const isMounted = useRef(false);
+
     useEffect(() => {
+        isMounted.current = true;
         fetchProducts();
+
+        // Nettoyage lors du démontage du composant
+        return () => {
+            isMounted.current = false;
+        };
     }, []);
 
     const fetchProducts = async () => {
         try {
             const res = await axios.get('/api/products');
-            setProducts(res.data);
+            if (isMounted.current) {  // Vérifie si le composant est monté avant de mettre à jour l'état
+                setProducts(res.data);
+            }
         } catch (err) {
             console.error(err);
-            setError('Erreur lors du chargement des produits.');
+            if (isMounted.current) {
+                setError('Erreur lors du chargement des produits.');
+            }
         }
     };
 
@@ -70,21 +89,27 @@ export default function ProductsManager() {
             const description = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
 
             if (editingProduct?._id) {
-                // Update product
+                // Mise à jour du produit
                 await axios.put(`/api/products/${editingProduct._id}`, { ...newProduct, description, imageUrl });
-                setProducts(products.map(product =>
-                    product._id === editingProduct._id ? { ...product, ...newProduct, description, imageUrl } : product
-                ));
+                if (isMounted.current) { // Vérifie si le composant est monté avant de mettre à jour l'état
+                    setProducts(products.map(product =>
+                        product._id === editingProduct._id ? { ...product, ...newProduct, description, imageUrl } : product
+                    ));
+                }
             } else {
-                // Add new product
+                // Ajout d'un nouveau produit
                 const res = await axios.post('/api/products', { ...newProduct, description, imageUrl });
-                setProducts([...products, res.data]);
+                if (isMounted.current) { // Vérifie si le composant est monté avant de mettre à jour l'état
+                    setProducts([...products, res.data]);
+                }
             }
 
             resetForm();
         } catch (err) {
             console.error(err);
-            setError('Erreur lors de l\'ajout ou de la modification du produit.');
+            if (isMounted.current) {
+                setError('Erreur lors de l\'ajout ou de la modification du produit.');
+            }
         }
     };
 
@@ -130,10 +155,14 @@ export default function ProductsManager() {
     const handleDeleteProduct = async (id: ObjectId) => {
         try {
             await axios.delete(`/api/products/${id}`);
-            setProducts(products.filter(product => product._id !== id));
+            if (isMounted.current) { // Vérifie si le composant est monté avant de mettre à jour l'état
+                setProducts(products.filter(product => product._id !== id));
+            }
         } catch (err) {
             console.error(err);
-            setError('Erreur lors de la suppression du produit.');
+            if (isMounted.current) {
+                setError('Erreur lors de la suppression du produit.');
+            }
         }
     };
 
@@ -146,7 +175,6 @@ export default function ProductsManager() {
         const matchesCategory = categoryFilter ? product.category === categoryFilter : true;
         return matchesName && matchesCategory;
     });
-
     return (
         <div className={styles.productsManager}>
             <h1>Gestion des Produits</h1>
@@ -270,8 +298,7 @@ export default function ProductsManager() {
                                     try {
                                         const parsedDescription = JSON.parse(product.description);
                                         return parsedDescription.blocks
-                                            .map((block: { text: string }) => block.text)
-
+                                            .map((block: any) => block.text)
                                             .join('\n');
                                     } catch {
                                         return product.description; // Retourne la description brute si ce n'est pas du JSON
@@ -289,6 +316,6 @@ export default function ProductsManager() {
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     );
 }
