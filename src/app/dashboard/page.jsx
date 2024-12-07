@@ -1,7 +1,7 @@
 'use client';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductsManager from '../components/Dashboard/Products/ProductsManager'
 import styles from './styles.module.scss';
 
@@ -9,14 +9,17 @@ export default function DashboardPage() {
     const { status } = useSession();
     const router = useRouter();
     const [isSidebarOpen, setSidebarOpen] = useState(false);
-    const [sideChoice, setSideChoice] = useState('produits')
+    const [sideChoice, setSideChoice] = useState('produits');
+
     // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/auth/login");
+        }
+    }, [status, router]); // L'effet est déclenché lorsque `status` change
+
     if (status === "loading") {
         return <div>Chargement...</div>;
-    }
-
-    if (status === "unauthenticated") {
-        router.push("/auth/login");
     }
 
     return (
@@ -37,7 +40,7 @@ export default function DashboardPage() {
             </nav>
             <div className={styles.content}>
                 <h1>Board</h1>
-                {sideChoice == 'produits' ? <ProductsManager /> : ""}
+                {sideChoice === 'produits' && <ProductsManager />}
             </div>
         </div>
     );
