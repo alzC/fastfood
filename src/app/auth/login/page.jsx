@@ -29,7 +29,7 @@ export default function LoginPage() {
     return (
         <div className={styles.loginPage}>
             <form onSubmit={handleLogin}>
-                <h1>Connexion</h1>
+                <h1 className="montserrat-alternates-regular">Market Shop</h1>
                 <div>
                     <label>Email</label>
                     <input

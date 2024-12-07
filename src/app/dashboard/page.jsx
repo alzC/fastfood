@@ -1,9 +1,13 @@
-'use client';
+"use client"
+import dynamic from 'next/dynamic';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import ProductsManager from '../components/Dashboard/Products/ProductsManager'
+
 import styles from './styles.module.scss';
+const ProductsManager = dynamic(() => import('../components/Dashboard/Products/ProductsManager'), {
+    ssr: false, // Désactive le rendu côté serveur
+});
 
 export default function DashboardPage() {
     const { status } = useSession();
@@ -11,12 +15,11 @@ export default function DashboardPage() {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [sideChoice, setSideChoice] = useState('produits');
 
-    // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
     useEffect(() => {
         if (status === "unauthenticated") {
             router.push("/auth/login");
         }
-    }, [status, router]); // L'effet est déclenché lorsque `status` change
+    }, [status, router]);
 
     if (status === "loading") {
         return <div>Chargement...</div>;
