@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { Product } from '@/models/product';  // Importer le modèle Product
-import { ObjectId } from 'mongodb';
 
- const dynamic = 'force-dynamic';
+ export const dynamic = 'force-dynamic';
 // Récupérer tous les produits (GET)
 export async function GET() {
   const client = await clientPromise;

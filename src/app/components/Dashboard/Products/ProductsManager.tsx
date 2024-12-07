@@ -270,7 +270,8 @@ export default function ProductsManager() {
                                     try {
                                         const parsedDescription = JSON.parse(product.description);
                                         return parsedDescription.blocks
-                                            .map((block: any) => block.text)
+                                            .map((block: { text: string }) => block.text)
+
                                             .join('\n');
                                     } catch {
                                         return product.description; // Retourne la description brute si ce n'est pas du JSON
