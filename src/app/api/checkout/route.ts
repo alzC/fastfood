@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         const { cart, address, phoneNumber, customerEmail } = await req.json();
 
         // Conversion des articles du panier pour Stripe
-        const lineItems = cart.map((item: any) => ({
+        const lineItems = cart.map((item: { name: string; price: number; quantity: number }) => ({
             price_data: {
                 currency: 'eur',
                 product_data: { name: item.name },

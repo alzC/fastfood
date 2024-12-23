@@ -56,14 +56,6 @@ export default function Epicerie() {
         });
     };
 
-    const handleRemoveFromCart = (productId: string) => {
-        setCart((prevCart) => {
-            const updatedCart = { ...prevCart };
-            delete updatedCart[productId]; // Supprimer le produit du panier
-            return updatedCart;
-        });
-    };
-
     const handleChangeQuantity = (productId: string, change: number) => {
         setCart((prevCart) => {
             const existingCartItem = prevCart[productId];
@@ -73,7 +65,7 @@ export default function Epicerie() {
 
             if (newQuantity <= 0) {
                 // Si la quantité tombe à 0 ou moins, supprimer l'article du panier
-                const { [productId]: _, ...rest } = prevCart;
+                const { [productId]: removedItem, ...rest } = prevCart;
                 return rest;
             }
 
@@ -86,8 +78,6 @@ export default function Epicerie() {
             };
         });
     };
-
-    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY || '');
 
     const handlePayment = async () => {
         try {
@@ -115,7 +105,6 @@ export default function Epicerie() {
             console.error("Erreur lors de la création de la session de paiement:", error);
         }
     };
-
 
     const toggleCart = () => {
         setIsCartOpen(!isCartOpen);

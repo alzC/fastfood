@@ -3,8 +3,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from './styles.module.scss';
 
+interface Order {
+    _id: string;
+    customerEmail: string;
+    status: string;
+    address: string;
+    phoneNumber: string;
+    items: { name: string }[];
+}
+
 export default function OrderManager() {
-    const [orders, setOrders] = useState<any[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -55,7 +64,7 @@ export default function OrderManager() {
                             <td>{order.status}</td>
                             <td>{order.address}</td>
                             <td>{order.phoneNumber}</td>
-                            <td>{order.items.map((item: any) => item.name).join(", ")}</td>
+                            <td>{order.items.map((item) => item.name).join(", ")}</td>
                             <td>
                                 {order.status !== "validated" && (
                                     <button onClick={() => handleValidateOrder(order._id)}>Valider</button>

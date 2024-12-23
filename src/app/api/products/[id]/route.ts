@@ -61,7 +61,7 @@ export async function PUT(request: Request, context: { params: { id: string } })
   }
 
   // Préparez les champs à mettre à jour
-  const updateFields: any = {
+  const updateFields: { name: string; price: number; stock: number; ingredients?: string[]; supplements?: string[]; imageUrl?: string } = {
     name,
     price,
     stock,

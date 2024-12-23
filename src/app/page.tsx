@@ -1,5 +1,4 @@
 import styles from "./page.module.css";
-import Navbar from "./components/Navbar/Navbar";
 import Link from "next/link";
 
 export default function Home() {
