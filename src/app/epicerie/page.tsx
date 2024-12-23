@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
-import { loadStripe } from '@stripe/stripe-js';
 import styles from './styles.module.scss';
 import { Product } from '@/models/product';
 
@@ -65,7 +64,7 @@ export default function Epicerie() {
 
             if (newQuantity <= 0) {
                 // Si la quantité tombe à 0 ou moins, supprimer l'article du panier
-                const { [productId]: removedItem, ...rest } = prevCart;
+                const { [productId]: _, ...rest } = prevCart;
                 return rest;
             }
 
