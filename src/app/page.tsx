@@ -18,10 +18,7 @@ export default function Home() {
       </header>
       <main className={styles.main}>
 
-        <div className={styles.cook}>
-          <img src="assets/cook.png" alt="" />
-          <p>Cuisine</p>
-        </div>
+
         <div>
           <Link className={styles.shopping} href={"/epicerie"}>
             <img src="assets/shop.png" alt="" />
@@ -35,4 +32,7 @@ export default function Home() {
     </div>
   );
 }
-
+/* <div className={styles.cook}>
+          <img src="assets/cook.png" alt="" />
+          <p>Cuisine</p>
+        </div>*/

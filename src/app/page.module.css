@@ -105,15 +105,17 @@
 	flex-direction: column;
 	align-items: center;
 	box-shadow: 0 0 15px rgb(252, 234, 252);
+	background: #ffffff;
+	color: #040404;
+	box-shadow: 0 0 5px #ffffff, 0 0 25px #ffffff, 0 0 50px #ffffff,
+		0 0 150px #ffffff;
+	-webkit-box-reflect: below -5px linear-gradient(transparent, #0005);
 }
 .cook p {
 	font-size: 48px;
-	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
-		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
 }
 .cook img {
-	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
-		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
+	filter: invert(1);
 }
 .shopping {
 	margin: 0 12px;
@@ -125,16 +127,16 @@
 	padding: 15px;
 	flex-direction: column;
 	align-items: center;
+	background: #fc8dee;
+	color: #ffffff;
+	box-shadow: 0 0 5px #fc8dee, 0 0 25px #fc8dee, 0 0 50px #fc8dee,
+		0 0 150px #fc8dee;
+	-webkit-box-reflect: below -5px linear-gradient(transparent, #0005);
 }
 .shopping p {
 	font-size: 48px;
-	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
-		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
 }
-.shopping img {
-	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
-		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
-}
+
 .snap {
 	height: 150px;
 	justify-content: center;
