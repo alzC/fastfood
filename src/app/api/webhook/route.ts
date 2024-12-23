@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import clientPromise from '@/lib/mongodb';
 
@@ -8,9 +8,9 @@ const stripe = new Stripe(process.env.NEXT_PRIVATE_STRIPE_KEY || '', {
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
-export async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const sig = req.headers['stripe-signature'] as string;
-    const body = req.body;
+export async function POST(req: NextRequest) {
+    const sig = req.headers.get('stripe-signature') as string;
+    const body = await req.text();
 
     try {
         const event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
@@ -51,10 +51,10 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
             }
         }
 
-        res.status(200).json({ received: true });
+        return NextResponse.json({ received: true });
     } catch (error) {
         console.error('Erreur de webhook Stripe:', error);
         const errorMessage = (error as Error).message;
-        res.status(400).send(`Webhook Error: ${errorMessage}`);
+        return NextResponse.json({ error: `Webhook Error: ${errorMessage}` }, { status: 400 });
     }
 }
