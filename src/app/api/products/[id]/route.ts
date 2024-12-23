@@ -1,22 +1,26 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import fs from 'fs/promises';
 import path from 'path';
 
 // Récupérer un produit spécifique par ID (GET)
-export async function GET(request: Request, context: { params: { id: string } }) {
-  const { id } = context.params; // Résolvez les paramètres avant de les utiliser
-  const client = await clientPromise;
-  const db = client.db('restaurant');
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+    try {
+        const client = await clientPromise;
+        const db = client.db();
 
-  const product = await db.collection('products').findOne({ _id: new ObjectId(id) });
+        const product = await db.collection('products').findOne({ _id: new ObjectId(params.id) });
 
-  if (!product) {
-    return NextResponse.json({ error: 'Produit introuvable' }, { status: 404 });
-  }
+        if (!product) {
+            return NextResponse.json({ error: 'Produit non trouvé' }, { status: 404 });
+        }
 
-  return NextResponse.json(product);
+        return NextResponse.json(product);
+    } catch (error) {
+        console.error('Erreur lors de la récupération du produit :', error);
+        return NextResponse.json({ error: 'Erreur lors de la récupération du produit' }, { status: 500 });
+    }
 }
 
 // Mettre à jour un produit spécifique (PATCH)
