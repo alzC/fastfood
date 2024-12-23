@@ -6,8 +6,8 @@
 }
 @media (prefers-color-scheme: light) {
 	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
+		--foreground: #0a0a0a;
+		--background: #ededed;
 	}
 }
 @media (prefers-color-scheme: dark) {
@@ -54,4 +54,12 @@ a {
 }
 .rdw-editor-wrapper {
 	height: 400px;
+	margin-bottom: 85px;
+}
+@media (max-width: 750px) {
+	.rdw-editor-wrapper {
+		height: 400px;
+		margin-bottom: 100px;
+		max-height: 180px;
+	}
 }

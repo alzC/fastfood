@@ -1,20 +1,155 @@
-.page .banner {
-	height: 50vh;
-	background-image: url(../../public/assets/burger.jpg);
-	background-size: cover;
-	background-position: center center;
+.page {
+	height: 100vh;
+	background-color: black;
 	color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	width: 100%;
 }
-
+.page header {
+	padding-top: 25px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
 .page .banner p {
 	font-size: 48px;
 
 	font-family: "Poppins", sans-serif;
 	font-weight: 400;
 	font-style: normal;
+}
+
+.neonText {
+	margin-right: 5px;
+	font-size: 4rem;
+	color: #fc8dee;
+	text-shadow: 0 0 7px rgb(255, 21, 224), 0 0 10px rgb(255, 125, 238),
+		0 0 21px rgb(255, 21, 224), 0 0 42px rgb(255, 21, 224),
+		0 0 82px rgb(255, 21, 224), 0 0 92px rgb(255, 21, 224),
+		0 0 102px rgb(255, 21, 224), 0 0 151px rgb(255, 21, 224);
+}
+
+.neonText2 {
+	display: flex;
+	align-items: center;
+	font-size: 4rem;
+	color: rgb(227, 224, 227);
+	text-shadow: 0 0 7px rgb(227, 224, 227), 0 0 10px rgb(255, 125, 238),
+		0 0 21px rgb(227, 224, 227), 0 0 42px rgb(255, 21, 224),
+		0 0 82px rgb(227, 224, 227), 0 0 92px rgb(255, 21, 224),
+		0 0 102px rgb(255, 21, 224), 0 0 151px rgb(255, 21, 224);
+}
+.logo {
+	display: flex;
+}
+.neonCircle {
+	position: relative;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+	border-radius: 50%;
+	background: radial-gradient(
+		circle,
+		rgba(255, 0, 255, 0.5),
+		rgba(255, 0, 255, 0.1)
+	);
+	box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(255, 0, 255, 0.6),
+		0 0 60px rgba(255, 0, 255, 0.4);
+	z-index: 1;
+}
+
+.shop {
+	height: 48px;
+	width: 48px;
+	animation: glow 1.5s infinite;
+	z-index: 2;
+}
+
+.textPart {
+	position: relative;
+	z-index: 3;
+}
+
+.neonText2 {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px; /* Ajout d'un espace pour éviter que les éléments se chevauchent */
+	position: relative;
+}
+
+@keyframes glow {
+	0%,
+	100% {
+		filter: drop-shadow(0 0 10px rgba(254, 240, 254, 0.8))
+			drop-shadow(0 0 20px rgba(255, 250, 255, 0.6));
+	}
+	50% {
+		filter: drop-shadow(0 0 15px rgb(252, 234, 252))
+			drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
+	}
+}
+.main {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	align-items: center;
+	width: 100%;
+	height: 70vh;
+}
+.cook {
+	margin: 0 12px;
+	cursor: pointer;
+	border: solid 1px white;
+	border-radius: 8px;
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-shadow: 0 0 15px rgb(252, 234, 252);
+}
+.cook p {
+	font-size: 48px;
+	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
+		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
+}
+.cook img {
+	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
+		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
+}
+.shopping {
+	margin: 0 12px;
+	border: solid 1px white;
+	border-radius: 8px;
+	box-shadow: 0 0 15px rgb(252, 234, 252);
+	cursor: pointer;
+	display: flex;
+	padding: 15px;
+	flex-direction: column;
+	align-items: center;
+}
+.shopping p {
+	font-size: 48px;
+	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
+		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
+}
+.shopping img {
+	filter: drop-shadow(0 0 15px rgb(252, 234, 252))
+		drop-shadow(0 0 30px rgba(253, 230, 253, 0.9));
+}
+.snap {
+	height: 150px;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	color: #fbe923;
+	font-size: 48;
+	text-shadow: 0 0 7px rgb(227, 224, 227), 0 0 10px rgb(255, 125, 238),
+		0 0 21px #fbe923, 0 0 42px #fbe923, 0 0 82px #fbe923, 0 0 92px #fbe923,
+		0 0 102px #fbe923, 0 0 151px #fbe923;
+}
+.snap img {
+	margin-left: 5px;
+	height: 48px;
+	filter: drop-shadow(0 0 15px #fbe923) drop-shadow(0 0 35px #fbe923)
+		drop-shadow(0 0 75px #fbe923) drop-shadow(0 0 100px #fbe923)
+		drop-shadow(0 0 18px #fbe923);
 }

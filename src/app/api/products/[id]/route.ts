@@ -5,11 +5,12 @@ import fs from 'fs/promises';
 import path from 'path';
 
 // Récupérer un produit spécifique par ID (GET)
-export async function GET(request, { params }) {
+export async function GET(request: Request, context: { params: { id: string } }) {
+  const { id } = context.params; // Résolvez les paramètres avant de les utiliser
   const client = await clientPromise;
   const db = client.db('restaurant');
 
-  const product = await db.collection('products').findOne({ _id: new ObjectId(params.id) });
+  const product = await db.collection('products').findOne({ _id: new ObjectId(id) });
 
   if (!product) {
     return NextResponse.json({ error: 'Produit introuvable' }, { status: 404 });
@@ -19,53 +20,24 @@ export async function GET(request, { params }) {
 }
 
 // Mettre à jour un produit spécifique (PATCH)
-export async function PATCH(request, { params }) {
+export async function PATCH(request: Request, context: { params: { id: string } }) {
+  const { id } = context.params; // Résolvez les paramètres avant de les utiliser
   const client = await clientPromise;
   const db = client.db('restaurant');
 
   const body = await request.json();
   const { name, price, stock } = body;
 
-  // Créer un objet `updateFields` avec les données mises à jour
-  const updateFields = {};
+  const updateFields: Record<string, unknown> = {};
 
   if (name) updateFields.name = name;
   if (price) updateFields.price = price;
   if (stock !== undefined) updateFields.stock = stock;
-
+if (body.ingredients) updateFields.ingredients = body.ingredients;
+if (body.supplements) updateFields.supplements = body.supplements;
   const result = await db.collection('products').updateOne(
-    { _id: new ObjectId(params.id) },
+    { _id: new ObjectId(id) },
     { $set: updateFields }
-  );
-
-  if (result.matchedCount === 0) {
-    return NextResponse.json({ error: 'Produit introuvable' }, { status: 404 });
-  }
-
-  return NextResponse.json(result);
-}
-
-// Remplacer complètement un produit (PUT)
-export async function PUT(request, { params }) {
-  const client = await clientPromise;
-  const db = client.db('restaurant');
-
-  const body = await request.json();
-  const { name, price, stock } = body;
-
-  if (!name || !price || stock === undefined) {
-    return NextResponse.json({ error: 'Tous les champs sont obligatoires' }, { status: 400 });
-  }
-
-  const result = await db.collection('products').updateOne(
-    { _id: new ObjectId(params.id) },
-    {
-      $set: {
-        name,
-        price,
-        stock,
-      },
-    }
   );
 
   if (result.matchedCount === 0) {
@@ -75,19 +47,60 @@ export async function PUT(request, { params }) {
   return NextResponse.json({ message: 'Produit mis à jour avec succès' });
 }
 
-// Supprimer un produit (DELETE)
-export async function DELETE(request, { params }) {
+// Remplacer complètement un produit (PUT)
+export async function PUT(request: Request, context: { params: { id: string } }) {
+  const { id } = context.params; // Résolvez les paramètres avant de les utiliser
   const client = await clientPromise;
   const db = client.db('restaurant');
 
-  // Récupérer le produit avant suppression pour récupérer l'URL de l'image
-  const product = await db.collection('products').findOne({ _id: new ObjectId(params.id) });
+  const body = await request.json();
+  const { name, price, stock, ingredients, supplements, imageUrl } = body; // Récupérer imageUrl depuis le body
+
+  if (!name || !price || stock === undefined) {
+    return NextResponse.json({ error: 'Tous les champs sont obligatoires' }, { status: 400 });
+  }
+
+  // Préparez les champs à mettre à jour
+  const updateFields: any = {
+    name,
+    price,
+    stock,
+  };
+
+  // Ajoutez les champs optionnels uniquement s'ils sont présents
+  if (ingredients) updateFields.ingredients = ingredients;
+  if (supplements) updateFields.supplements = supplements;
+
+  // Si une nouvelle image est envoyée, on met à jour l'URL
+  if (imageUrl) {
+    updateFields.imageUrl = imageUrl;
+  }
+
+  const result = await db.collection('products').updateOne(
+    { _id: new ObjectId(id) },
+    { $set: updateFields }
+  );
+
+  if (result.matchedCount === 0) {
+    return NextResponse.json({ error: 'Produit introuvable' }, { status: 404 });
+  }
+
+  console.log('Produit mis à jour avec succès:', { id, updateFields });
+  return NextResponse.json({ message: 'Produit mis à jour avec succès' });
+}
+
+// Supprimer un produit (DELETE)
+export async function DELETE(request: Request, context: { params: { id: string } }) {
+  const { id } = context.params; // Résolvez les paramètres avant de les utiliser
+  const client = await clientPromise;
+  const db = client.db('restaurant');
+
+  const product = await db.collection('products').findOne({ _id: new ObjectId(id) });
 
   if (!product) {
     return NextResponse.json({ error: 'Produit introuvable' }, { status: 404 });
   }
 
-  // Supprimer le fichier image associé
   if (product.imageUrl) {
     const imagePath = path.join(process.cwd(), 'public', 'uploads', path.basename(product.imageUrl));
     try {
@@ -98,8 +111,7 @@ export async function DELETE(request, { params }) {
     }
   }
 
-  // Supprimer le produit de la base de données
-  const result = await db.collection('products').deleteOne({ _id: new ObjectId(params.id) });
+  const result = await db.collection('products').deleteOne({ _id: new ObjectId(id) });
 
   if (result.deletedCount === 0) {
     return NextResponse.json({ error: 'Échec de la suppression du produit' }, { status: 500 });

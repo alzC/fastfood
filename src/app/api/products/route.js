@@ -23,10 +23,20 @@ export async function POST(request) {
   if (!body.name || !body.price || body.stock === undefined || !body.category || !body.description) {
     return NextResponse.json({ error: 'Nom, prix, stock, catégorie et description sont requis.' }, { status: 400 });
   }
+  if (body.ingredients && !Array.isArray(body.ingredients)) {
+    return NextResponse.json({ error: 'Les ingrédients doivent être une liste.' }, { status: 400 });
+  }
+
+  if (body.supplements && !Array.isArray(body.supplements)) {
+    return NextResponse.json({ error: 'Les suppléments doivent être une liste.' }, { status: 400 });
+  }
+
 
   try {
     const result = await db.collection('products').insertOne({
       ...body,
+      ingredients: body.ingredients || [],
+      supplements: body.supplements || [],
       createdAt: new Date(),
       updatedAt: new Date(),
     });
