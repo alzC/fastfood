@@ -18,7 +18,12 @@ export default function Home() {
       </header>
       <main className={styles.main}>
 
-
+        <div>
+          <Link className={styles.cook} href={"/cuisine"}>
+            <img src="assets/cook.png" alt="" />
+            <p>Cuisine</p>
+          </Link>
+        </div>
         <div>
           <Link className={styles.shopping} href={"/epicerie"}>
             <img src="assets/shop.png" alt="" />

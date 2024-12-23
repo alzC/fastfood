@@ -12,6 +12,9 @@ const ProductsManager = dynamic(() => import('../components/Dashboard/Products/P
 const OrdersManager = dynamic(() => import('../components/Dashboard/Order/OrderManager'), {
     ssr: false,
 });
+const DeliveryManager = dynamic(() => import('../components/Dashboard/DeliveryManager/DeliveryManager'), {
+    ssr: false,
+});
 export default function DashboardPage() {
     const { status } = useSession();
     const router = useRouter();
@@ -40,7 +43,7 @@ export default function DashboardPage() {
                 <ul>
                     <li onClick={() => setSideChoice('commandes')}>Commandes</li>
                     <li onClick={() => setSideChoice('produits')}>Produits</li>
-                    <li>Livraisons</li>
+                    <li onClick={() => setSideChoice('livraison')}>Livraisons</li>
                     <li>Statistiques</li>
                 </ul>
             </nav>
@@ -48,6 +51,7 @@ export default function DashboardPage() {
                 <h1>Board</h1>
                 {sideChoice === 'commandes' && <OrdersManager />}
                 {sideChoice === 'produits' && <ProductsManager />}
+                {sideChoice === 'livraison' && <DeliveryManager />}
             </div>
         </div>
     );

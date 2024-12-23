@@ -1,4 +1,4 @@
-.orderManager {
+.deliveryManager {
     position: relative;
     padding: 20px;
     background-color: #f9f9f9;
@@ -26,7 +26,6 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    overflow-x: auto;
 }
 
 .orderTable th,
@@ -45,9 +44,9 @@
 }
 
 .detailsButton,
-.prepareButton {
+.deliverButton {
     padding: 8px 12px;
-    background-color: #007bff;
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 4px;
@@ -56,8 +55,8 @@
 }
 
 .detailsButton:hover,
-.prepareButton:hover {
-    background-color: #0056b3;
+.deliverButton:hover {
+    background-color: #218838;
 }
 
 .orderDetails {
@@ -83,24 +82,4 @@
 
 .orderDetails ul li:last-child {
     border-bottom: none;
-}
-
-@media (max-width: 768px) {
-
-    .orderTable th,
-    .orderTable td {
-        padding: 8px 10px;
-    }
-
-    .detailsButton,
-    .prepareButton {
-        padding: 6px 10px;
-        font-size: 14px;
-    }
-
-    .orderCount {
-        width: 25px;
-        height: 25px;
-        font-size: 14px;
-    }
 }
