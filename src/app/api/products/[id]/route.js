@@ -5,26 +5,26 @@ import fs from 'fs/promises';
 import path from 'path';
 
 // Récupérer un produit spécifique par ID (GET)
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    try {
-        const client = await clientPromise;
-        const db = client.db();
+export async function GET(req, { params }) {
+  try {
+    const client = await clientPromise;
+    const db = client.db();
 
-        const product = await db.collection('products').findOne({ _id: new ObjectId(params.id) });
+    const product = await db.collection('products').findOne({ _id: new ObjectId(params.id) });
 
-        if (!product) {
-            return NextResponse.json({ error: 'Produit non trouvé' }, { status: 404 });
-        }
-
-        return NextResponse.json(product);
-    } catch (error) {
-        console.error('Erreur lors de la récupération du produit :', error);
-        return NextResponse.json({ error: 'Erreur lors de la récupération du produit' }, { status: 500 });
+    if (!product) {
+      return NextResponse.json({ error: 'Produit non trouvé' }, { status: 404 });
     }
+
+    return NextResponse.json(product);
+  } catch (error) {
+    console.error('Erreur lors de la récupération du produit :', error);
+    return NextResponse.json({ error: 'Erreur lors de la récupération du produit' }, { status: 500 });
+  }
 }
 
 // Mettre à jour un produit spécifique (PATCH)
-export async function PATCH(request: Request, context: { params: { id: string } }) {
+export async function PATCH(request, context) {
   const { id } = context.params; // Résolvez les paramètres avant de les utiliser
   const client = await clientPromise;
   const db = client.db('restaurant');
@@ -32,13 +32,14 @@ export async function PATCH(request: Request, context: { params: { id: string } 
   const body = await request.json();
   const { name, price, stock } = body;
 
-  const updateFields: Record<string, unknown> = {};
+  const updateFields = {};
 
   if (name) updateFields.name = name;
   if (price) updateFields.price = price;
   if (stock !== undefined) updateFields.stock = stock;
-if (body.ingredients) updateFields.ingredients = body.ingredients;
-if (body.supplements) updateFields.supplements = body.supplements;
+  if (body.ingredients) updateFields.ingredients = body.ingredients;
+  if (body.supplements) updateFields.supplements = body.supplements;
+
   const result = await db.collection('products').updateOne(
     { _id: new ObjectId(id) },
     { $set: updateFields }
@@ -52,7 +53,7 @@ if (body.supplements) updateFields.supplements = body.supplements;
 }
 
 // Remplacer complètement un produit (PUT)
-export async function PUT(request: Request, context: { params: { id: string } }) {
+export async function PUT(request, context) {
   const { id } = context.params; // Résolvez les paramètres avant de les utiliser
   const client = await clientPromise;
   const db = client.db('restaurant');
@@ -65,7 +66,7 @@ export async function PUT(request: Request, context: { params: { id: string } })
   }
 
   // Préparez les champs à mettre à jour
-  const updateFields: { name: string; price: number; stock: number; ingredients?: string[]; supplements?: string[]; imageUrl?: string } = {
+  const updateFields = {
     name,
     price,
     stock,
@@ -94,7 +95,7 @@ export async function PUT(request: Request, context: { params: { id: string } })
 }
 
 // Supprimer un produit (DELETE)
-export async function DELETE(request: Request, context: { params: { id: string } }) {
+export async function DELETE(request, context) {
   const { id } = context.params; // Résolvez les paramètres avant de les utiliser
   const client = await clientPromise;
   const db = client.db('restaurant');
