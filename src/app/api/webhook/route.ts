@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
             if (order) {
                 await db.collection('orders').updateOne(
                     { sessionId: session.id },
-                    { $set: { status: 'prepared', updatedAt: new Date() } }
+                    { $set: { status: 'paid', updatedAt: new Date() } }
                 );
             }
         }

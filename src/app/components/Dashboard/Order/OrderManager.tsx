@@ -9,11 +9,12 @@ interface Order {
     status: string;
     address: string;
     phoneNumber: string;
-    items: { name: string }[];
+    items: { name: string; quantity: number }[];
 }
 
 export default function OrderManager() {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -26,6 +27,8 @@ export default function OrderManager() {
         };
 
         fetchOrders();
+        console.log(orders);
+
     }, []);
 
     const handleValidateOrder = async (orderId: string) => {
@@ -41,6 +44,23 @@ export default function OrderManager() {
         }
     };
 
+    const handlePrepareOrder = async (orderId: string) => {
+        try {
+            await axios.post(`/api/order/${orderId}/prepare`);
+            setOrders((prevOrders) =>
+                prevOrders.map((order) =>
+                    order._id === orderId ? { ...order, status: "prepared" } : order
+                )
+            );
+        } catch (error) {
+            console.error("Erreur lors de la préparation de la commande :", error);
+        }
+    };
+
+    const toggleOrderDetails = (orderId: string) => {
+        setSelectedOrderId(selectedOrderId === orderId ? null : orderId);
+    };
+
     return (
         <div className={styles.orderManager}>
             <h2>Gestion des commandes</h2>
@@ -52,7 +72,6 @@ export default function OrderManager() {
                         <th>Statut</th>
                         <th>Adresse de Livraison</th>
                         <th>Téléphone</th>
-                        <th>Contenu</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -64,9 +83,13 @@ export default function OrderManager() {
                             <td>{order.status}</td>
                             <td>{order.address}</td>
                             <td>{order.phoneNumber}</td>
-                            <td>{order.items.map((item) => item.name).join(", ")}</td>
                             <td>
-                                {order.status !== "validated" && (
+                                {order.status === "paid" && (
+                                    <button onClick={() => toggleOrderDetails(order._id)}>
+                                        {selectedOrderId === order._id ? "Masquer" : "Afficher"} les détails
+                                    </button>
+                                )}
+                                {order.status === "prepared" && (
                                     <button onClick={() => handleValidateOrder(order._id)}>Valider</button>
                                 )}
                             </td>
@@ -74,6 +97,24 @@ export default function OrderManager() {
                     ))}
                 </tbody>
             </table>
-        </div>
+            {selectedOrderId && (
+
+                <div className={styles.orderDetails}>
+                    <h3>Détails de la commande</h3>
+                    <ul>
+                        {orders
+                            .find((order) => order._id === selectedOrderId)
+                            ?.items.map((item) => (
+                                <li key={item.name}>
+                                    {item.name} - Quantité: {item.quantity}
+                                </li>
+                            ))}
+                    </ul>
+                    <button onClick={() => handlePrepareOrder(selectedOrderId)}>Marquer comme préparée</button>
+                </div>
+
+            )
+            }
+        </div >
     );
 }

@@ -8,10 +8,10 @@ import styles from './styles.module.scss';
 const ProductsManager = dynamic(() => import('../components/Dashboard/Products/ProductsManager'), {
     ssr: false, // Désactive le rendu côté serveur
 });
-/*
-const OrdersManager = dynamic(() => import('../components/Dashboard/Orders/OrdersManager'), {
+
+const OrdersManager = dynamic(() => import('../components/Dashboard/Order/OrderManager'), {
     ssr: false,
-});*/
+});
 export default function DashboardPage() {
     const { status } = useSession();
     const router = useRouter();
@@ -38,7 +38,7 @@ export default function DashboardPage() {
             </button>
             <nav className={`${styles.nav} ${isSidebarOpen ? styles.open : ''}`}>
                 <ul>
-                    <li>Commandes</li>
+                    <li onClick={() => setSideChoice('commandes')}>Commandes</li>
                     <li onClick={() => setSideChoice('produits')}>Produits</li>
                     <li>Livraisons</li>
                     <li>Statistiques</li>
@@ -46,7 +46,7 @@ export default function DashboardPage() {
             </nav>
             <div className={styles.content}>
                 <h1>Board</h1>
-                {/*sideChoice === 'commandes' && <OrdersManager />*/}
+                {sideChoice === 'commandes' && <OrdersManager />}
                 {sideChoice === 'produits' && <ProductsManager />}
             </div>
         </div>
