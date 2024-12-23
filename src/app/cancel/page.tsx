@@ -9,7 +9,7 @@ export default function CancelPage() {
         <div className={styles.cancelPage}>
             <h1>Paiement échoué</h1>
             <p>Votre paiement a échoué. Veuillez réessayer.</p>
-            <button className={styles.homeButton} onClick={() => router.push('/')}>Retour à l'accueil</button>
+            <button className={styles.homeButton} onClick={() => router.push('/')}>Retour à l&apos;accueil</button>
         </div>
     );
 }

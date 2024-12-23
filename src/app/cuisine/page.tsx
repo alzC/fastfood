@@ -67,7 +67,7 @@ export default function Cuisine() {
 
             if (newQuantity <= 0) {
                 // Si la quantité tombe à 0 ou moins, supprimer l'article du panier
-                const { [productId]: _, ...rest } = prevCart;
+                const { [productId]: removedItem, ...rest } = prevCart;
                 return rest;
             }
 

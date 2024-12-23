@@ -65,7 +65,7 @@ export default function SuccessPage() {
                 </ul>
                 <p><strong>Total :</strong> {items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}€</p>
             </div>
-            <button className={styles.homeButton} onClick={() => router.push('/')}>Retour à l'accueil</button>
+            <button className={styles.homeButton} onClick={() => router.push('/')}>Retour à l&apos;accueil</button>
         </div>
     );
 }
