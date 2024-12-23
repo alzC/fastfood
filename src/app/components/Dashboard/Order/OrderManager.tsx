@@ -71,7 +71,6 @@ export default function OrderManager() {
                 <tbody>
                     {orders.map((order) => (
                         <tr key={order._id}>
-
                             <td>{order._id}</td>
                             <td>{order.status}</td>
                             <td>{order.address}</td>
