@@ -1,9 +1,19 @@
 .cuisine {
+    height: 100vh;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
+    font-family: 'Arial', sans-serif;
+    background: url(../../../public/assets/food.svg) no-repeat center center;
+    background-size: cover;
+}
+
+
+
+.subCategory h2 {
+    text-align: left;
 }
 
 .cartIcon {
@@ -19,6 +29,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .cartCount {
@@ -56,6 +67,7 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .closeCart {
@@ -76,6 +88,24 @@
     width: 100%;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cartItemDetails {
+    flex: 1;
+    color: #555;
+    text-align: left;
+}
+
+.supplementsList {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    font-size: 0.9em;
+    color: #555;
 }
 
 .cartItemControls {
@@ -86,10 +116,14 @@
 .cartItemControls button {
     background: none;
     border: none;
-    color: white;
+    color: #007bff;
     font-size: 18px;
     cursor: pointer;
     margin: 0 5px;
+}
+
+.cartItemControls button:hover {
+    color: #0056b3;
 }
 
 .userDetailsForm {
@@ -136,6 +170,7 @@
     display: flex;
     overflow-x: auto;
     padding: 10px 0;
+    gap: 10px;
 }
 
 .product {
@@ -147,6 +182,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: left;
     padding: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .productImage {
@@ -164,4 +206,71 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.product button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product button:hover {
+    background-color: #0056b3;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popupContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+    color: black;
+    max-width: 500px;
+    width: 100%;
+}
+
+.popupContent h2 {
+    margin-top: 0;
+}
+
+.popupContent h3 {
+    margin-bottom: 10px;
+}
+
+.popupContent label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.popupContent button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.popupContent button:hover {
+    background-color: #0056b3;
 }

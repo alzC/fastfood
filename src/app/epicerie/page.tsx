@@ -17,6 +17,7 @@ export default function Epicerie() {
     const [cart, setCart] = useState<Record<string, { product: Product; quantity: number }>>({});
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [categoryFilter, setCategoryFilter] = useState<string>('');
+    const [subCategoryFilter, setSubCategoryFilter] = useState<string>('');
     const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
     const [formValid, setFormValid] = useState(false);
     const [userDetails, setUserDetails] = useState({ name: '', email: '', address: '', phoneNumber: '' });
@@ -25,7 +26,7 @@ export default function Epicerie() {
         const fetchProducts = async () => {
             try {
                 const res = await axios.get('/api/products');
-                setProducts(res.data);
+                setProducts(res.data.filter((product: Product) => product.category !== "Cuisine"));
             } catch (err) {
                 console.error('Erreur lors du chargement des produits:', err);
             }
@@ -127,7 +128,8 @@ export default function Epicerie() {
     const filteredProducts = products.filter((product) => {
         const matchesName = product.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = categoryFilter ? product.category === categoryFilter : true;
-        return matchesName && matchesCategory;
+        const matchesSubCategory = subCategoryFilter ? product.subCategory === subCategoryFilter : true;
+        return matchesName && matchesCategory && matchesSubCategory;
     });
 
     return (
@@ -148,6 +150,17 @@ export default function Epicerie() {
                     {Array.from(new Set(products.map((p) => p.category))).map((category) => (
                         <option key={category} value={category}>
                             {category}
+                        </option>
+                    ))}
+                </select>
+                <select
+                    value={subCategoryFilter}
+                    onChange={(e) => setSubCategoryFilter(e.target.value)}
+                >
+                    <option value="">Toutes les sous-catégories</option>
+                    {Array.from(new Set(products.map((p) => p.subCategory))).map((subCategory) => (
+                        <option key={subCategory} value={subCategory}>
+                            {subCategory}
                         </option>
                     ))}
                 </select>

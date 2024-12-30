@@ -15,6 +15,9 @@ interface Order {
 interface Item {
     name: string;
     quantity: number;
+    ingredients?: string[];
+    supplements?: { name: string; price: number }[];
+    sauce?: string;
 }
 
 export default function OrderManager() {
@@ -91,6 +94,19 @@ export default function OrderManager() {
                         {JSON.parse(orders.find((order) => order._id === selectedOrderId)?.items || '[]').map((item: Item) => (
                             <li key={item.name}>
                                 {item.name} - Quantité: {item.quantity}
+                                {item.ingredients && item.ingredients.length > 0 && (
+                                    <ul>
+                                        <li>Ingrédients: {item.ingredients.join(", ")}</li>
+                                    </ul>
+                                )}
+                                {item.supplements && item.supplements.length > 0 && (
+                                    <ul>
+                                        <li>Suppléments: {item.supplements.map(supplement => `${supplement.name} (+${supplement.price}€)`).join(", ")}</li>
+                                    </ul>
+                                )}
+                                {item.sauce && (
+                                    <p>Sauce: {item.sauce}</p>
+                                )}
                             </li>
                         ))}
                     </ul>

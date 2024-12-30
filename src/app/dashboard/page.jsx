@@ -15,6 +15,13 @@ const OrdersManager = dynamic(() => import('../components/Dashboard/Order/OrderM
 const DeliveryManager = dynamic(() => import('../components/Dashboard/DeliveryManager/DeliveryManager'), {
     ssr: false,
 });
+const TopProducts = dynamic(() => import('../components/Dashboard/Statistics/TopProducts'), {
+    ssr: false,
+});
+const MonthlyRevenueChart = dynamic(() => import('../components/Dashboard/Statistics/MonthlyRevenueChart'), {
+    ssr: false,
+});
+
 export default function DashboardPage() {
     const { status } = useSession();
     const router = useRouter();
@@ -44,7 +51,7 @@ export default function DashboardPage() {
                     <li onClick={() => setSideChoice('commandes')}>Commandes</li>
                     <li onClick={() => setSideChoice('produits')}>Produits</li>
                     <li onClick={() => setSideChoice('livraison')}>Livraisons</li>
-                    <li>Statistiques</li>
+                    <li onClick={() => setSideChoice('statistiques')}>Statistiques</li>
                 </ul>
             </nav>
             <div className={styles.content}>
@@ -52,6 +59,12 @@ export default function DashboardPage() {
                 {sideChoice === 'commandes' && <OrdersManager />}
                 {sideChoice === 'produits' && <ProductsManager />}
                 {sideChoice === 'livraison' && <DeliveryManager />}
+                {sideChoice === 'statistiques' && (
+                    <>
+                        <TopProducts />
+                        <MonthlyRevenueChart />
+                    </>
+                )}
             </div>
         </div>
     );
