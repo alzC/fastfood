@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import styles from './styles.module.scss';
@@ -19,7 +19,7 @@ interface Item {
     price: number;
 }
 
-export default function SuccessPage() {
+function SuccessPageContent() {
     const searchParams = useSearchParams();
     const sessionId = searchParams.get("session_id");
     const [order, setOrder] = useState<Order | null>(null);
@@ -67,5 +67,13 @@ export default function SuccessPage() {
             </div>
             <button className={styles.homeButton} onClick={() => router.push('/')}>Retour à l&apos;accueil</button>
         </div>
+    );
+}
+
+export default function SuccessPage() {
+    return (
+        <Suspense fallback={<div>Chargement...</div>}>
+            <SuccessPageContent />
+        </Suspense>
     );
 }
